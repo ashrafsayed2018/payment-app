@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_payment_app/pages/payment.dart';
+import 'package:flutter_payment_app/widgets/button.dart';
 import 'package:flutter_payment_app/widgets/larg_button.dart';
 import 'package:flutter_payment_app/widgets/text_size.dart';
+import 'package:get/route_manager.dart';
 import '/component/colors.dart';
 
 class Home extends StatefulWidget {
@@ -25,8 +28,6 @@ class _HomeState extends State<Home> {
         child: Stack(
           children: [
             _headSection(),
-            _curveImage(),
-            _buttonContainer(),
             _billsList(),
             _payButton(),
           ],
@@ -198,20 +199,89 @@ class _HomeState extends State<Home> {
     return Positioned(
       top: screenHeight! * .32,
       right: 35,
-      child: Container(
-        height: 60,
-        width: 60,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/lines.png"),
-          ),
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 15,
-              offset: Offset(0, 1),
-              color: Color(0xff11324d).withOpacity(.2),
+      child: GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+            isScrollControlled: true,
+            barrierColor: Colors.transparent,
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (context) {
+              return Container(
+                height: screenHeight! - 240,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      child: Container(
+                        color: Color(0xffeef1f4).withOpacity(.7),
+                        width: screenWidth,
+                        height: screenHeight! - 270,
+                      ),
+                    ),
+                    Positioned(
+                      right: 35,
+                      top: -10,
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 10, bottom: 20),
+                        decoration: BoxDecoration(
+                          color: AppColor.mainColor,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        width: 60,
+                        height: 250,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Button(
+                              icon: Icons.cancel,
+                              iconColor: AppColor.mainColor,
+                              backgroundColor: Colors.white,
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            Button(
+                              icon: Icons.add,
+                              iconColor: AppColor.mainColor,
+                              backgroundColor: Colors.white,
+                              text: "Add Bill",
+                              textColor: Colors.white,
+                            ),
+                            Button(
+                              icon: Icons.history,
+                              iconColor: AppColor.mainColor,
+                              backgroundColor: Colors.white,
+                              onTap: () {},
+                              text: "History",
+                              textColor: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+          );
+        },
+        child: Container(
+          height: 60,
+          width: 60,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/lines.png"),
             ),
-          ],
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 15,
+                offset: Offset(0, 1),
+                color: Color(0xff11324d).withOpacity(.2),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -238,24 +308,66 @@ class _HomeState extends State<Home> {
         height: screenHeight! * .4,
         child: Stack(
           children: [
-            Positioned(
-                child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("images/background.png"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ))
+            _mainBackground(),
+            _curveImage(),
+            _buttonContainer(),
+            _textContainer(),
           ],
         ),
       );
+
+  Positioned _mainBackground() {
+    return Positioned(
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
 
   Positioned _payButton() => Positioned(
         bottom: 15,
         child: LargButton(
           text: "Pay all bills",
           textColor: Colors.white,
+          onTap: () {
+            Get.to(
+              () => Payment(),
+            );
+          },
         ),
+      );
+
+  Stack _textContainer() => Stack(
+        children: [
+          Positioned(
+            top: 120,
+            left: 0,
+            child: Text(
+              "My Bills",
+              style: TextStyle(
+                fontSize: 60,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff293952),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 100,
+            left: 20,
+            child: Text(
+              "My Bills",
+              style: TextStyle(
+                fontSize: 55,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       );
 }

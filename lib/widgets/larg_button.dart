@@ -35,7 +35,7 @@ class LargButton extends StatelessWidget {
           child: Text(
             text!,
             style: TextStyle(
-              fontSize: 35,
+              fontSize: 30,
               color: textColor,
               fontWeight: FontWeight.bold,
             ),
